@@ -13,6 +13,10 @@ async function getAccessToken() {
   const res = await axios.post("https://api-preprod.phonepe.com/oauth/token", {
     clientId,
     clientSecret,
+  }, {
+    headers: {
+      "Content-Type": "application/json"
+    }
   });
   return res.data.accessToken;
 }
@@ -45,10 +49,10 @@ app.post("/create-payment", async (req, res) => {
     const payUrl = payRes.data.data.instrumentResponse.redirectInfo.url;
     res.json({ url: payUrl });
   } catch (err) {
-  console.error("❌ Error creating payment:", err.response?.data || err.message);
-  res.status(500).json({ error: err.response?.data || err.message });
-}
-
+    console.error("❌ Error creating payment:", err.response?.data || err.message);
+    res.status(500).json({ error: err.response?.data || err.message });
+  } // ✅ THIS WAS MISSING
+});
 
 app.get("/", (req, res) => res.send("✅ PhonePe backend is running"));
 

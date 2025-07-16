@@ -45,10 +45,10 @@ app.post("/create-payment", async (req, res) => {
     const payUrl = payRes.data.data.instrumentResponse.redirectInfo.url;
     res.json({ url: payUrl });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Payment failed");
-  }
-});
+  console.error("❌ Error creating payment:", err.response?.data || err.message);
+  res.status(500).json({ error: err.response?.data || err.message });
+}
+
 
 app.get("/", (req, res) => res.send("✅ PhonePe backend is running"));
 
